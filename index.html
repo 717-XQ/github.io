@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>依陪护 · 首页</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f5f7fc;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding-bottom: 80px; /* 为底部导航栏留出空间 */
+        }
+        .card-shadow {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 20, 50, 0.03);
+        }
+        .hover-lift {
+            transition: all 0.2s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(0, 20, 40, 0.08);
+        }
+        .badge-soft {
+            background: #eef2ff;
+            color: #2563eb;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .clickable-large {
+            min-height: 56px;
+            padding: 14px 18px;
+        }
+        /* 底部导航栏样式 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0 20px;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.02);
+            z-index: 40;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #9ca3af;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+        .nav-item.active {
+            color: #2563eb;
+        }
+        .nav-item i {
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+        }
+        .nav-item span {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        /* 登录卡片 */
+        .login-card {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 md:py-6">
+
+    <!-- ========== 顶部导航 / 登录状态条 ========= -->
+    <div class="flex items-center justify-between mb-4 md:mb-6">
+        <div class="flex items-center space-x-2">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
+                <i class="fas fa-hands-helping text-white text-xl"></i>
+            </div>
+            <span class="text-xl font-bold text-gray-800 tracking-tight">依陪护<span class="text-blue-600 text-sm font-medium ml-1.5">首页</span></span>
+        </div>
+        <div id="authSection" class="flex items-center gap-3">
+            <div id="loginButtons">
+                <button onclick="showLoginModal()" class="bg-white border border-gray-200 hover:border-blue-300 text-gray-700 font-medium px-5 py-2.5 rounded-full text-sm shadow-sm flex items-center gap-2 transition">
+                    <i class="fas fa-user-circle text-blue-500"></i> 登录 / 注册
+                </button>
+            </div>
+            <div id="userProfile" class="hidden items-center gap-3">
+                <div class="flex items-center gap-2 bg-white py-1.5 px-3 rounded-full shadow-sm border border-gray-100">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-semibold text-sm">
+                        <span id="userInitial">张</span>
+                    </div>
+                    <span id="userNameDisplay" class="text-gray-700 font-medium text-sm">张大爷</span>
+                </div>
+                <button onclick="logout()" class="text-gray-500 hover:text-red-500 text-sm"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 快捷功能入口 (模仿App首页金刚区) ========= -->
+    <div class="grid grid-cols-4 gap-3 mb-6">
+        <div class="bg-white rounded-xl p-3 text-center card-shadow">
+            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-1 text-blue-600"><i class="fas fa-calendar-plus text-lg"></i></div>
+            <span class="text-xs font-medium text-gray-700">快速约诊</span>
+        </div>
+        <div class="bg-white rounded-xl p-3 text-center card-shadow">
+            <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-1 text-emerald-600"><i class="fas fa-user-md text-lg"></i></div>
+            <span class="text-xs font-medium text-gray-700">找陪诊师</span>
+        </div>
+        <div class="bg-white rounded-xl p-3 text-center card-shadow">
+            <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-1 text-amber-600"><i class="fas fa-notes-medical text-lg"></i></div>
+            <span class="text-xs font-medium text-gray-700">服务项目</span>
+        </div>
+        <div class="bg-white rounded-xl p-3 text-center card-shadow">
+            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-1 text-purple-600"><i class="fas fa-file-invoice text-lg"></i></div>
+            <span class="text-xs font-medium text-gray-700">我的订单</span>
+        </div>
+    </div>
+
+    <!-- ========== 主要布局：左侧陪诊师信息库 + 右侧陪护类型/个人信息 ========= -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6">
+
+        <!-- 左侧：AI陪诊师信息库 (占据2列) -->
+        <div class="lg:col-span-2 space-y-5">
+
+            <!-- 搜索/筛选条 + AI生成标识 -->
+            <div class="bg-white rounded-2xl p-5 card-shadow border border-gray-100">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-robot text-blue-500 text-xl"></i>
+                        <h2 class="text-xl font-semibold text-gray-800">陪诊师信息库</h2>
+                        <span class="badge-soft ml-2"><i class="fas fa-magic mr-1"></i>实时生成</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-500">
+                        <i class="fas fa-sync-alt text-blue-400"></i>
+                        <span>智能匹配 · 按需推荐</span>
+                    </div>
+                </div>
+                <!-- 筛选标签 (模拟) -->
+                <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <span class="text-sm text-gray-500 mr-1">服务专长:</span>
+                    <button class="px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-medium border border-blue-200">全部</button>
+                    <button class="px-4 py-1.5 rounded-full bg-gray-50 text-gray-600 text-sm border border-gray-200 hover:bg-gray-100">老年陪诊</button>
+                    <button class="px-4 py-1.5 rounded-full bg-gray-50 text-gray-600 text-sm border border-gray-200 hover:bg-gray-100">术后陪护</button>
+                    <button class="px-4 py-1.5 rounded-full bg-gray-50 text-gray-600 text-sm border border-gray-200 hover:bg-gray-100">慢性病管理</button>
+                    <button class="px-4 py-1.5 rounded-full bg-gray-50 text-gray-600 text-sm border border-gray-200 hover:bg-gray-100">认知症陪护</button>
+                </div>
+                <!-- 搜索框 -->
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" placeholder="搜索陪诊师姓名、医院或擅长领域..." class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-300 outline-none transition text-gray-700">
+                </div>
+            </div>
+
+            <!-- 陪诊师卡片网格 (AI动态生成数据库) -->
+            <div id="companionListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- 通过 JS 动态渲染 -->
+            </div>
+
+            <!-- 加载更多 / 提示 -->
+            <div class="text-center text-sm text-gray-400 pt-2 flex items-center justify-center gap-3">
+                <span class="w-8 h-px bg-gray-200"></span>
+                <span><i class="fas fa-shield-alt mr-1"></i> 陪诊师均已实名认证 · 持证上岗</span>
+                <span class="w-8 h-px bg-gray-200"></span>
+            </div>
+        </div>
+
+        <!-- 右侧：陪护类型选择 + 个人信息模块 + 登录模块快捷入口 -->
+        <div class="space-y-5">
+
+            <!-- 卡片：选择陪护类型 (预约类型) -->
+            <div class="bg-white rounded-2xl p-5 card-shadow border border-gray-100">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="fas fa-clipboard-list text-indigo-500 text-xl"></i>
+                    <h3 class="text-lg font-semibold">陪护类型</h3>
+                </div>
+                <p class="text-sm text-gray-500 mb-4">根据需求选择服务类型，系统将匹配专业陪诊师</p>
+
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="relative">
+                        <input type="radio" name="serviceType" id="type1" value="全程陪诊" class="peer hidden" checked>
+                        <label for="type1" class="block p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-blue-300 peer-checked:border-blue-500 peer-checked:bg-blue-50/30 transition text-center">
+                            <i class="fas fa-user-md text-blue-500 text-xl mb-1"></i>
+                            <div class="font-medium text-gray-800">全程陪诊</div>
+                            <div class="text-xs text-gray-400 mt-1">挂号·就诊·取药</div>
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input type="radio" name="serviceType" id="type2" value="代办问诊" class="peer hidden">
+                        <label for="type2" class="block p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-blue-300 peer-checked:border-blue-500 peer-checked:bg-blue-50/30 transition text-center">
+                            <i class="fas fa-notes-medical text-indigo-500 text-xl mb-1"></i>
+                            <div class="font-medium text-gray-800">代办问诊</div>
+                            <div class="text-xs text-gray-400 mt-1">代配药·问诊</div>
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input type="radio" name="serviceType" id="type3" value="检查陪同" class="peer hidden">
+                        <label for="type3" class="block p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-blue-300 peer-checked:border-blue-500 peer-checked:bg-blue-50/30 transition text-center">
+                            <i class="fas fa-microscope text-emerald-500 text-xl mb-1"></i>
+                            <div class="font-medium text-gray-800">检查陪同</div>
+                            <div class="text-xs text-gray-400 mt-1">B超·CT·化验</div>
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input type="radio" name="serviceType" id="type4" value="住院陪护" class="peer hidden">
+                        <label for="type4" class="block p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-blue-300 peer-checked:border-blue-500 peer-checked:bg-blue-50/30 transition text-center">
+                            <i class="fas fa-hospital-user text-amber-500 text-xl mb-1"></i>
+                            <div class="font-medium text-gray-800">住院陪护</div>
+                            <div class="text-xs text-gray-400 mt-1">全天·夜间陪护</div>
+                        </label>
+                    </div>
+                </div>
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3.5 rounded-xl shadow-sm shadow-blue-200 transition flex items-center justify-center gap-2 clickable-large">
+                    <i class="fas fa-calendar-check"></i> 立即预约陪诊
+                </button>
+                <p class="text-xs text-gray-400 text-center mt-3">已有2300+老人选择 · 可取消或改签</p>
+            </div>
+
+            <!-- 卡片：个人信息管理 (已登录可编辑) -->
+            <div class="bg-white rounded-2xl p-5 card-shadow border border-gray-100">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-id-card text-blue-500"></i>
+                        <h3 class="text-lg font-semibold">个人信息</h3>
+                    </div>
+                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">就诊人管理</span>
+                </div>
+
+                <!-- 未登录提示 -->
+                <div id="personalInfoLoginPrompt" class="text-center py-4">
+                    <i class="fas fa-user-lock text-4xl text-gray-300 mb-3"></i>
+                    <p class="text-gray-500 mb-3 text-sm">登录后可查看/编辑个人信息</p>
+                    <button onclick="showLoginModal()" class="bg-gray-100 hover:bg-gray-200 px-5 py-2.5 rounded-full text-gray-700 font-medium text-sm transition">
+                        <i class="fas fa-sign-in-alt mr-1"></i> 立即登录
+                    </button>
+                </div>
+
+                <!-- 登录后显示个人信息表单 -->
+                <div id="personalInfoPanel" class="hidden">
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">姓名</label>
+                            <div class="flex items-center gap-2">
+                                <input type="text" id="patientName" value="张德福" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:ring-1 focus:ring-blue-200 outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">身份证号</label>
+                            <input type="text" id="patientId" value="410***************" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-700">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">年龄</label>
+                                <input type="number" id="patientAge" value="72" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">性别</label>
+                                <select id="patientGender" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg">
+                                    <option>男</option>
+                                    <option>女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">联系电话</label>
+                            <input type="tel" id="patientPhone" value="138****5678" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">紧急联系人</label>
+                            <input type="tel" id="emergencyContact" value="李淑芬 (女) 139****1234" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg">
+                        </div>
+                        <button class="w-full mt-2 bg-white border border-blue-300 text-blue-600 hover:bg-blue-50 py-2.5 rounded-lg text-sm font-medium transition">
+                            <i class="fas fa-save mr-1"></i> 保存个人信息
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 微信/手机号登录快捷入口 -->
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-5 border border-blue-100">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="fab fa-weixin text-green-600 text-xl"></i>
+                    <i class="fas fa-mobile-alt text-gray-600 text-xl"></i>
+                    <span class="font-medium text-gray-700">微信 / 手机号登录</span>
+                </div>
+                <p class="text-sm text-gray-500 mb-4">支持微信一键登录或手机号快速登录，同步就诊人信息</p>
+                <div class="flex gap-3">
+                    <button onclick="simulateWechatLogin()" class="flex-1 wechat-btn text-white font-medium py-3 px-4 rounded-xl shadow-sm flex items-center justify-center gap-2 clickable-large" style="background: #09BB07;">
+                        <i class="fab fa-weixin"></i> 微信登录
+                    </button>
+                    <button onclick="showLoginModal()" class="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-2 clickable-large">
+                        <i class="fas fa-phone-alt"></i> 手机号登录
+                    </button>
+                </div>
+                <p class="text-xs text-gray-400 text-center mt-3">登录即代表同意《用户协议》及《隐私政策》</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 登录模态框 (手机号/微信登录) ========= -->
+    <div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden" style="background: rgba(0,0,0,0.2); backdrop-filter: blur(4px);">
+        <div class="bg-white rounded-3xl w-full max-w-md p-6 shadow-2xl login-card">
+            <div class="flex justify-between items-center mb-5">
+                <h2 class="text-xl font-bold text-gray-800">登录 / 注册</h2>
+                <button onclick="hideLoginModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+                    <i class="fas fa-times text-gray-500"></i>
+                </button>
+            </div>
+
+            <div class="flex border-b border-gray-200 mb-5">
+                <button id="tabPhone" onclick="switchLoginTab('phone')" class="flex-1 py-3 text-center font-medium text-blue-600 border-b-2 border-blue-600">手机号登录</button>
+                <button id="tabWechat" onclick="switchLoginTab('wechat')" class="flex-1 py-3 text-center text-gray-500">微信登录</button>
+            </div>
+
+            <div id="phoneLoginForm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">手机号码</label>
+                        <div class="flex items-center border border-gray-200 rounded-xl px-3 py-2 bg-gray-50">
+                            <span class="text-gray-500 mr-2">+86</span>
+                            <input type="tel" id="phoneInput" placeholder="请输入手机号" class="w-full bg-transparent outline-none text-gray-800">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">验证码</label>
+                        <div class="flex gap-2">
+                            <input type="text" placeholder="请输入验证码" class="flex-1 border border-gray-200 rounded-xl px-3 py-2 bg-gray-50 outline-none">
+                            <button class="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap hover:bg-blue-100">获取验证码</button>
+                        </div>
+                    </div>
+                    <button onclick="simulateLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3.5 rounded-xl shadow-sm transition">
+                        登录 / 注册
+                    </button>
+                    <p class="text-xs text-gray-400 text-center">未注册手机号将自动创建账号</p>
+                </div>
+            </div>
+
+            <div id="wechatLoginForm" class="hidden text-center py-4">
+                <div class="w-20 h-20 mx-auto bg-green-50 rounded-full flex items-center justify-center mb-3">
+                    <i class="fab fa-weixin text-green-600 text-4xl"></i>
+                </div>
+                <p class="text-gray-600 mb-5">点击按钮后将跳转微信授权</p>
+                <button onclick="simulateWechatLogin()" class="text-white w-full py-3.5 rounded-xl font-medium" style="background: #09BB07;">
+                    <i class="fab fa-weixin mr-2"></i> 微信一键登录
+                </button>
+                <p class="text-xs text-gray-400 mt-4">授权后自动绑定手机号</p>
+            </div>
+
+            <div class="mt-5 text-center text-xs text-gray-400">
+                登录即代表同意《用户协议》和《隐私政策》
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 (App风格) -->
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="services.html" class="nav-item">
+            <i class="fas fa-concierge-bell"></i>
+            <span>服务</span>
+        </a>
+        <a href="orders.html" class="nav-item">
+            <i class="fas fa-clipboard-list"></i>
+            <span>订单</span>
+        </a>
+    </div>
+
+    <!-- 底部版权/提示 -->
+    <div class="mt-8 text-center text-gray-400 text-xs border-t border-gray-200 pt-6">
+        <p>依陪护 · 专业老年看病陪诊 | 陪诊师均持证上岗 · 智能匹配</p>
+        <p class="mt-1">© 2026 依陪护 · 客服 400-882-1234</p>
+    </div>
+</div>
+
+<script>
+    // ---------- 全局变量 ----------
+    let isLoggedIn = true; // 默认登录以展示个人信息面板，便于演示
+    let currentUser = { name: '张大爷', initial: '张', phone: '138****5678' };
+
+    // ---------- AI 生成陪诊师信息库 (模拟数据库) ----------
+    const mockCompanions = [
+        {
+            id: 1,
+            name: '王丽华',
+            title: '资深陪诊师',
+            avatarColor: 'from-pink-400 to-rose-400',
+            initial: '王',
+            hospital: '市人民医院 / 协和医院',
+            specialties: ['老年陪诊', '慢性病'],
+            rating: 4.9,
+            orders: 1280,
+            cert: '高级护理员',
+            exp: '8年',
+            desc: '擅长老年沟通，耐心细致，熟悉三甲医院流程。'
+        },
+        {
+            id: 2,
+            name: '陈国栋',
+            title: '金牌陪诊',
+            avatarColor: 'from-blue-500 to-indigo-600',
+            initial: '陈',
+            hospital: '华山医院 / 中山医院',
+            specialties: ['术后陪护', '检查陪同'],
+            rating: 4.95,
+            orders: 2100,
+            cert: '护师资格',
+            exp: '10年',
+            desc: '专业护理背景，协助术后康复及复杂检查。'
+        },
+        {
+            id: 3,
+            name: '李素芬',
+            title: '暖心陪诊',
+            avatarColor: 'from-emerald-400 to-teal-500',
+            initial: '李',
+            hospital: '瑞金医院 / 仁济医院',
+            specialties: ['认知症陪护', '代办问诊'],
+            rating: 4.85,
+            orders: 980,
+            cert: '认知症照护师',
+            exp: '6年',
+            desc: '认知症专项训练，安抚情绪，协助就诊。'
+        },
+        {
+            id: 4,
+            name: '张志强',
+            title: '全能陪诊',
+            avatarColor: 'from-amber-400 to-orange-500',
+            initial: '张',
+            hospital: '长海医院 / 东方肝胆',
+            specialties: ['全程陪诊', '住院陪护'],
+            rating: 4.92,
+            orders: 1550,
+            cert: '健康管理师',
+            exp: '7年',
+            desc: '全流程服务，代取报告，夜间陪护。'
+        },
+        // AI生成更多数据
+        {
+            id: 5,
+            name: '赵敏慧',
+            title: '资深陪诊师',
+            avatarColor: 'from-purple-400 to-pink-400',
+            initial: '赵',
+            hospital: '北京协和医院 / 安贞医院',
+            specialties: ['老年陪诊', '检查陪同'],
+            rating: 4.88,
+            orders: 1520,
+            cert: '高级护理员',
+            exp: '9年',
+            desc: '熟悉心血管科室流程，对老年人特别有耐心。'
+        },
+        {
+            id: 6,
+            name: '孙建国',
+            title: '金牌陪诊',
+            avatarColor: 'from-cyan-400 to-blue-400',
+            initial: '孙',
+            hospital: '上海华山医院 / 肿瘤医院',
+            specialties: ['术后陪护', '住院陪护'],
+            rating: 4.93,
+            orders: 1870,
+            cert: '护师资格',
+            exp: '12年',
+            desc: '曾在三甲医院ICU工作，专业护理经验丰富。'
+        }
+    ];
+
+    // 渲染陪诊师卡片 (AI信息库)
+    function renderCompanionCards() {
+        const container = document.getElementById('companionListContainer');
+        if (!container) return;
+        let html = '';
+        mockCompanions.forEach(c => {
+            const specTags = c.specialties.map(s => `<span class="badge-soft text-xs">${s}</span>`).join('');
+            html += `
+                <div class="bg-white rounded-2xl p-4 card-shadow border border-gray-100 hover-lift transition">
+                    <div class="flex gap-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br ${c.avatarColor} flex items-center justify-center text-white text-2xl font-semibold shadow-sm flex-shrink-0">
+                            ${c.initial}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="font-bold text-lg text-gray-800">${c.name}</span>
+                                    <span class="text-xs text-gray-400 ml-1">${c.title}</span>
+                                </div>
+                                <span class="text-amber-500 text-sm"><i class="fas fa-star mr-0.5"></i>${c.rating}</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                ${specTags}
+                            </div>
+                            <div class="text-sm text-gray-600 mt-1 flex items-center gap-2">
+                                <i class="fas fa-hospital text-gray-400 text-xs"></i> ${c.hospital}
+                            </div>
+                            <div class="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                                <span><i class="fas fa-id-card mr-1"></i>${c.cert}</span>
+                                <span><i class="fas fa-briefcase mr-1"></i>${c.exp}</span>
+                                <span><i class="fas fa-user-check mr-1"></i>${c.orders}+单</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-2 border-t border-gray-100 pt-2">✨ ${c.desc}</p>
+                            <button class="mt-3 w-full bg-blue-50 hover:bg-blue-100 text-blue-700 py-2 rounded-lg text-sm font-medium transition flex items-center justify-center gap-1">
+                                <i class="fas fa-calendar-plus"></i> 预约陪诊
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // 切换登录状态UI
+    function updateAuthUI() {
+        const loginBtns = document.getElementById('loginButtons');
+        const userProfile = document.getElementById('userProfile');
+        const personalPrompt = document.getElementById('personalInfoLoginPrompt');
+        const personalPanel = document.getElementById('personalInfoPanel');
+        const userNameSpan = document.getElementById('userNameDisplay');
+        const userInitialSpan = document.getElementById('userInitial');
+
+        if (isLoggedIn) {
+            loginBtns.classList.add('hidden');
+            userProfile.classList.remove('hidden');
+            userProfile.classList.add('flex');
+            personalPrompt.classList.add('hidden');
+            personalPanel.classList.remove('hidden');
+            userNameSpan.innerText = currentUser.name;
+            userInitialSpan.innerText = currentUser.initial;
+        } else {
+            loginBtns.classList.remove('hidden');
+            userProfile.classList.add('hidden');
+            userProfile.classList.remove('flex');
+            personalPrompt.classList.remove('hidden');
+            personalPanel.classList.add('hidden');
+        }
+    }
+
+    // 登录模态框
+    function showLoginModal() {
+        document.getElementById('loginModal').classList.remove('hidden');
+    }
+    function hideLoginModal() {
+        document.getElementById('loginModal').classList.add('hidden');
+    }
+
+    // 模拟登录
+    function simulateLogin() {
+        isLoggedIn = true;
+        currentUser = { name: '张德福', initial: '张', phone: '138****5678' };
+        updateAuthUI();
+        hideLoginModal();
+        alert('登录成功！欢迎，' + currentUser.name);
+    }
+
+    // 模拟微信登录
+    function simulateWechatLogin() {
+        isLoggedIn = true;
+        currentUser = { name: '张德福', initial: '张', phone: '138****5678' };
+        updateAuthUI();
+        hideLoginModal();
+        alert('微信授权登录成功！欢迎使用银龄陪护');
+    }
+
+    function logout() {
+        isLoggedIn = false;
+        updateAuthUI();
+        alert('已退出登录');
+    }
+
+    // 登录Tab切换
+    function switchLoginTab(type) {
+        const tabPhone = document.getElementById('tabPhone');
+        const tabWechat = document.getElementById('tabWechat');
+        const phoneForm = document.getElementById('phoneLoginForm');
+        const wechatForm = document.getElementById('wechatLoginForm');
+        if (type === 'phone') {
+            tabPhone.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+            tabPhone.classList.remove('text-gray-500');
+            tabWechat.classList.add('text-gray-500');
+            tabWechat.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+            phoneForm.classList.remove('hidden');
+            wechatForm.classList.add('hidden');
+        } else {
+            tabWechat.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+            tabWechat.classList.remove('text-gray-500');
+            tabPhone.classList.add('text-gray-500');
+            tabPhone.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+            wechatForm.classList.remove('hidden');
+            phoneForm.classList.add('hidden');
+        }
+    }
+
+    // 初始化
+    window.onload = function() {
+        renderCompanionCards();
+        updateAuthUI();
+        // 默认登录状态
+        isLoggedIn = true;
+        updateAuthUI();
+    };
+
+    // 全局函数暴露
+    window.showLoginModal = showLoginModal;
+    window.hideLoginModal = hideLoginModal;
+    window.simulateLogin = simulateLogin;
+    window.simulateWechatLogin = simulateWechatLogin;
+    window.logout = logout;
+    window.switchLoginTab = switchLoginTab;
+</script>
+</body>
+</html>
