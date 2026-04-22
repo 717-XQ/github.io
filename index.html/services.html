@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>依陪护 · 服务项目</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f7fc; font-family: 'Inter', sans-serif; padding-bottom: 80px; }
+        .card-shadow { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 20, 50, 0.03); }
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 8px 0 20px; box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.02); z-index: 40;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            color: #9ca3af; text-decoration: none; transition: color 0.2s;
+        }
+        .nav-item.active { color: #2563eb; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 2px; }
+        .nav-item span { font-size: 0.7rem; font-weight: 500; }
+        .service-card {
+            background: white; border-radius: 1.5rem; padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 20, 50, 0.03);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 md:py-6">
+    <!-- 头部 -->
+    <div class="flex items-center mb-6">
+        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm mr-3">
+            <i class="fas fa-concierge-bell text-white text-xl"></i>
+        </div>
+        <span class="text-2xl font-bold text-gray-800">服务项目</span>
+        <span class="ml-auto text-sm text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full">精选套餐</span>
+    </div>
+
+    <!-- 服务卡片列表 (AI生成数据) -->
+    <div class="space-y-4">
+        <!-- 卡片 1 -->
+        <div class="service-card">
+            <div class="flex items-start gap-4">
+                <div class="w-14 h-14 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-sm">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-gray-800">全程陪诊·基础版</h3>
+                        <span class="text-blue-600 font-bold text-lg">¥298</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-1">适合首次就诊、流程不熟悉的老人</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="far fa-clock mr-1"></i>约4小时</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-check-circle text-green-500 mr-1"></i>含挂号协助</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-print mr-1"></i>代取报告</span>
+                    </div>
+                    <button class="mt-4 w-full bg-blue-50 hover:bg-blue-100 text-blue-700 py-2.5 rounded-xl font-medium transition">
+                        查看详情 · 立即预约
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 卡片 2 -->
+        <div class="service-card">
+            <div class="flex items-start gap-4">
+                <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-sm">
+                    <i class="fas fa-microscope"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-gray-800">检查专项陪同</h3>
+                        <span class="text-blue-600 font-bold text-lg">¥398</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-1">针对CT、核磁、胃肠镜等复杂检查，全程专人陪护</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="far fa-clock mr-1"></i>按检查时长</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-wheelchair mr-1"></i>轮椅协助</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-file-medical-alt mr-1"></i>结果解读协助</span>
+                    </div>
+                    <button class="mt-4 w-full bg-blue-50 hover:bg-blue-100 text-blue-700 py-2.5 rounded-xl font-medium transition">
+                        查看详情 · 立即预约
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 卡片 3 -->
+        <div class="service-card">
+            <div class="flex items-start gap-4">
+                <div class="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-sm">
+                    <i class="fas fa-hospital-user"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-gray-800">住院陪护·全日</h3>
+                        <span class="text-blue-600 font-bold text-lg">¥480/天</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-1">24小时专业护工，协助饮食、翻身、如厕及夜间看护</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-moon mr-1"></i>夜间陪护</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-utensils mr-1"></i>协助进食</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-comment-medical mr-1"></i>医患沟通</span>
+                    </div>
+                    <button class="mt-4 w-full bg-blue-50 hover:bg-blue-100 text-blue-700 py-2.5 rounded-xl font-medium transition">
+                        查看详情 · 立即预约
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 卡片 4 (AI生成更多数据) -->
+        <div class="service-card">
+            <div class="flex items-start gap-4">
+                <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-sm">
+                    <i class="fas fa-notes-medical"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-gray-800">代办问诊·代配药</h3>
+                        <span class="text-blue-600 font-bold text-lg">¥198</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-1">子女代办，专业陪诊师代您去医院问诊、开药、取药</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-video mr-1"></i>远程视频连线</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-pills mr-1"></i>药品寄送</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-file-signature mr-1"></i>病历整理</span>
+                    </div>
+                    <button class="mt-4 w-full bg-blue-50 hover:bg-blue-100 text-blue-700 py-2.5 rounded-xl font-medium transition">
+                        查看详情 · 立即预约
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 卡片 5 -->
+        <div class="service-card">
+            <div class="flex items-start gap-4">
+                <div class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-sm">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-gray-800">认知症专项陪护</h3>
+                        <span class="text-blue-600 font-bold text-lg">¥350/次</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-1">由认知症照护专员陪同，防止走失，情绪安抚</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-heart mr-1"></i>专业安抚技巧</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-map-marked-alt mr-1"></i>防走失定位</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"><i class="fas fa-history mr-1"></i>回忆疗法辅助</span>
+                    </div>
+                    <button class="mt-4 w-full bg-blue-50 hover:bg-blue-100 text-blue-700 py-2.5 rounded-xl font-medium transition">
+                        查看详情 · 立即预约
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 底部导航栏 -->
+<div class="bottom-nav">
+    <a href="peihu2.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>首页</span>
+    </a>
+    <a href="services.html" class="nav-item active">
+        <i class="fas fa-concierge-bell"></i>
+        <span>服务</span>
+    </a>
+    <a href="orders.html" class="nav-item">
+        <i class="fas fa-clipboard-list"></i>
+        <span>订单</span>
+    </a>
+</div>
+</body>
+</html>
